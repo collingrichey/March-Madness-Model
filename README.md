@@ -272,4 +272,4 @@ Questions or issues? Open an issue on GitHub or contact [your email/contact info
 
 ---
 
-**Note:** This model is for educational and entertainment purposes. March Madness is notoriously unpredictable - use at your own risk! 🏀
+**Note:** This model is for educational and entertainment purposes. March Madness is notoriously unpredictable - use at your own risk!
