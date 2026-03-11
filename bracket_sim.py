@@ -963,7 +963,7 @@ def predict_bracket_with_game_simulations(bracket_data, team_stats, model, featu
             'Simulations': n_simulations_per_game
         })
     
-    print(f"\nPREDICTED CHAMPION: ({champion[0]}) {champion[1]} 🏆\n")
+    print(f"\nPREDICTED CHAMPION: ({champion[0]}) {champion[1]} \n")
     
     return pd.DataFrame(all_predictions), champion
 
