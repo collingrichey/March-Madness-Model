@@ -844,7 +844,7 @@ def predict_bracket_with_game_simulations(bracket_data, team_stats, model, featu
             round_num += 1
         
         regional_winners.append(current_round[0])
-        print(f"\n🏆 {region_names[region_code]} CHAMPION: ({current_round[0][0]}) {current_round[0][1]}")
+        print(f"\n {region_names[region_code]} CHAMPION: ({current_round[0][0]}) {current_round[0][1]}")
     
     # Final Four
     print(f"\n{'='*50}")
