@@ -1,0 +1,36 @@
+# March Madness Prediction Model - Required Libraries
+# Install with: pip install -r requirements.txt
+
+# Core data manipulation
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+
+# Machine learning
+scikit-learn>=1.3.0
+
+# Optional: Gradient boosting (uncomment if needed)
+# xgboost>=2.0.0
+# lightgbm>=4.0.0
+
+# Web scraping
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+html5lib>=1.1
+
+# SSL handling
+urllib3>=2.0.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# File handling
+openpyxl>=3.1.0
+
+# Development and utilities
+jupyter>=1.0.0
+ipython>=8.12.0
+tqdm>=4.65.0
+joblib>=1.3.0
