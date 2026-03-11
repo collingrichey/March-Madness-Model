@@ -1,2 +1,273 @@
-# March-Madness-Model
-This is a machine learning model that scrapes stats from the web, trains a model based on those stats, and simulates the NCAA Men's Basketball Tournament bracket.
+# March Madness Prediction Model
+
+A machine learning model that predicts NCAA March Madness tournament outcomes using logistic regression trained on historical team statistics and tournament results.
+
+## Features
+
+- **Data Scraping**: Automatically scrapes team statistics from Sports Reference
+- **Model Training**: Trains a logistic regression model on historical tournament games
+- **Bracket Simulation**: Three simulation modes:
+  - Most Likely Bracket (deterministic predictions)
+  - Game-by-Game Monte Carlo (simulates each game 1000x)
+  - Full Tournament Monte Carlo (10,000 complete brackets)
+- **Performance Analysis**: Confidence analysis, upset predictions, and feature importance
+
+## Prerequisites
+
+- Python 3.8 or higher
+- pip (Python package installer)
+- Internet connection (for scraping data)
+
+## Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/march-madness-model.git
+cd march-madness-model
+```
+
+### 2. Set Up Virtual Environment (Recommended)
+
+**On Mac/Linux:**
+```bash
+python3 -m venv march_madness_env
+source march_madness_env/bin/activate
+```
+
+**On Windows:**
+```bash
+python -m venv march_madness_env
+march_madness_env\Scripts\activate
+```
+
+### 3. Install Required Libraries
+
+**Option A: Using requirements.txt (recommended)**
+```bash
+pip install -r requirements.txt
+```
+
+**Option B: Using the install script**
+```bash
+chmod +x install_requirements.sh
+./install_requirements.sh
+```
+
+### 4. Download Kaggle Tournament Data
+
+1. Go to [Kaggle's March Madness Competition](https://www.kaggle.com/competitions/march-machine-learning-mania-2024/data)
+2. Download these files:
+   - `MNCAATourneyCompactResults.csv`
+   - `MNCAATourneySeeds.csv`
+   - `MTeams.csv`
+3. Create a `kaggle-data/` folder in the project directory
+4. Place the downloaded files in `kaggle-data/`
+
+Your directory structure should look like:
+```
+march-madness-model/
+├── data_scraper.py
+├── prediction_model.py
+├── bracket_sim.py
+├── requirements.txt
+├── install_requirements.sh
+├── kaggle-data/
+│   ├── MNCAATourneyCompactResults.csv
+│   ├── MNCAATourneySeeds.csv
+│   └── MTeams.csv
+└── data/ (will be created by scraper)
+```
+
+## Usage
+
+### Step 1: Scrape Team Statistics
+
+Scrape historical team statistics from Sports Reference:
+
+```bash
+python data_scraper.py
+```
+
+**What this does:**
+- Scrapes both basic and advanced team statistics
+- Combines them into a single file per year
+- Saves to `data/team_stats_YYYY.csv`
+
+**Important:** 
+- The script includes 3-5 second delays between requests to be respectful to the server
+- Edit the `years` range in `data_scraper.py` to choose which years to scrape
+- Default scrapes years 2000-2004 (update to your desired range)
+
+**Recommended:** Scrape at least 10 years of data (e.g., 2013-2023) for good model performance.
+
+### Step 2: Train the Model
+
+Train the prediction model on historical tournament games:
+
+```bash
+python prediction_model.py
+```
+
+**What this does:**
+- Loads scraped team statistics
+- Loads tournament results from Kaggle data
+- Creates training examples with differential features
+- Trains a logistic regression model
+- Saves the model to `models/march_madness_model.pkl`
+
+**Output includes:**
+- Training and test accuracy
+- Log loss scores
+- Top 10 most important features
+- Classification report
+
+### Step 3: Simulate Brackets
+
+Run bracket simulations for any year:
+
+```bash
+python bracket_sim.py
+```
+
+**Simulation Modes:**
+1. **Most Likely Bracket**: Picks the higher probability team in each game
+2. **Game-by-Game Monte Carlo**: Simulates each game 1000 times, picks winner
+3. **Single Bracket Simulation**: Random outcomes based on probabilities
+4. **Full Tournament Monte Carlo**: Runs 10,000 complete bracket simulations
+
+**Before running:**
+- Edit the `YEAR` variable in `bracket_sim.py` to set which tournament to simulate
+- Make sure you have scraped data for that year
+- Make sure the Kaggle data includes seeds for that year
+
+## Configuration
+
+### Scraping Different Years
+
+Edit `data_scraper.py`:
+```python
+years = range(2010, 2025)  # Scrape 2010-2024
+```
+
+### Changing Model Features
+
+Edit `prediction_model.py`:
+```python
+feature_columns = [
+    'Overall_W-L%',
+    'Overall_SRS',
+    'Overall_SOS',
+    # Add or remove features here
+]
+```
+
+### Adjusting Simulation Parameters
+
+Edit `bracket_sim.py`:
+```python
+YEAR = 2024  # Tournament year to simulate
+SIMULATIONS_PER_GAME = 1000  # Monte Carlo simulations per game
+```
+
+## Project Structure
+
+```
+march-madness-model/
+├── data_scraper.py           # Scrapes team statistics from Sports Reference
+├── prediction_model.py       # Trains the prediction model
+├── bracket_sim.py           # Runs bracket simulations
+├── requirements.txt         # Python dependencies
+├── install_requirements.sh  # Installation script
+├── README.md               # This file
+├── data/                   # Scraped team statistics (created by scraper)
+│   ├── team_stats_2015.csv
+│   ├── team_stats_2016.csv
+│   └── ...
+├── kaggle-data/           # Kaggle tournament data (you must download)
+│   ├── MNCAATourneyCompactResults.csv
+│   ├── MNCAATourneySeeds.csv
+│   └── MTeams.csv
+├── models/                # Trained models (created by training)
+│   └── march_madness_model.pkl
+└── results/              # Simulation results (created by simulation)
+    ├── most_likely_bracket_2024.csv
+    ├── game_by_game_bracket_2024.csv
+    └── championship_probabilities_2024.csv
+```
+
+## Troubleshooting
+
+### SSL Certificate Errors
+The scraper handles SSL certificate issues automatically. If you still encounter errors, the code includes SSL verification bypass for Sports Reference.
+
+### Team Name Mismatches
+If you see "Warning: Could not find stats for [team]", the team names between Kaggle and scraped data don't match. The code includes comprehensive team name mappings, but you may need to add more in the `normalize_team_name()` function in `bracket_sim.py`.
+
+### "Cannot find model file"
+Make sure you've run `prediction_model.py` to train and save the model before running `bracket_sim.py`.
+
+### Empty Predictions (All 50-50)
+This usually means:
+1. The model wasn't trained properly, or
+2. Feature names don't match between training and prediction
+
+Check that you're using the same years of data and that column names are consistent.
+
+## Model Performance
+
+Typical performance metrics:
+- **Accuracy**: 65-70% on test set
+- **Log Loss**: 0.55-0.65
+- **Most Important Features**: Win-Loss %, SRS (Simple Rating System), SOS (Strength of Schedule)
+
+## Advanced Usage
+
+### Using Different Models
+
+You can experiment with other models by editing `prediction_model.py`:
+
+```python
+from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier
+
+# Replace LogisticRegression with:
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+# or
+model = XGBClassifier(n_estimators=100, random_state=42)
+```
+
+### Adding More Features
+
+Common features to consider:
+- Offensive/Defensive ratings (ORtg, DRtg)
+- Four Factors (eFG%, TOV%, ORB%, FTr)
+- Pace statistics
+- Recent performance metrics
+
+## Contributing
+
+Contributions are welcome! Some ideas:
+- Add more sophisticated models (neural networks, ensemble methods)
+- Implement player-level statistics
+- Add momentum/recency weighting
+- Create visualization tools for brackets
+- Improve team name matching
+
+## License
+
+MIT License - feel free to use for personal or educational purposes.
+
+## Acknowledgments
+
+- Data from [Sports Reference](https://www.sports-reference.com/cbb/)
+- Tournament data from [Kaggle's March Madness Competition](https://www.kaggle.com/competitions/march-machine-learning-mania-2024)
+- Inspired by the annual quest to predict the unpredictable
+
+## Contact
+
+Questions or issues? Open an issue on GitHub or contact [your email/contact info]
+
+---
+
+**Note:** This model is for educational and entertainment purposes. March Madness is notoriously unpredictable - use at your own risk! 🏀
