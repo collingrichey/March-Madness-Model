@@ -450,7 +450,7 @@ def simulate_final_four(regional_winners, team_stats, model, feature_names):
         champion = (seed_2, team_2)
         print(f"({seed_2}) {team_2:25s} defeats ({seed_1}) {team_1:25s} [{1-prob_1_wins:.1%}]")
     
-    print(f"\n🏆 CHAMPION: ({champion[0]}) {champion[1]} 🏆\n")
+    print(f"\n CHAMPION: ({champion[0]}) {champion[1]} \n")
     
     return champion
 
@@ -606,7 +606,7 @@ def predict_most_likely_bracket(bracket_data, team_stats, model, feature_names):
             round_num += 1
         
         regional_winners.append(current_round[0])
-        print(f"\n🏆 {region_names[region_code]} CHAMPION: ({current_round[0][0]}) {current_round[0][1]}")
+        print(f"\n {region_names[region_code]} CHAMPION: ({current_round[0][0]}) {current_round[0][1]}")
     
     # Final Four
     print(f"\n{'='*50}")
