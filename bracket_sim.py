@@ -490,12 +490,12 @@ def simulate_single_bracket(bracket_data, team_stats, model, feature_names, verb
     else:
         # Silent Final Four
         # Semifinal 1
-        prob = predict_game(regional_winners[0][1], regional_winners[1][1], team_stats, model, feature_names)
-        finalist_1 = regional_winners[0] if np.random.random() < prob else regional_winners[1]
+        prob = predict_game(regional_winners[1][1], regional_winners[2][1], team_stats, model, feature_names)
+        finalist_1 = regional_winners[1] if np.random.random() < prob else regional_winners[2]
         
         # Semifinal 2
-        prob = predict_game(regional_winners[2][1], regional_winners[3][1], team_stats, model, feature_names)
-        finalist_2 = regional_winners[2] if np.random.random() < prob else regional_winners[3]
+        prob = predict_game(regional_winners[0][1], regional_winners[3][1], team_stats, model, feature_names)
+        finalist_2 = regional_winners[0] if np.random.random() < prob else regional_winners[3]
         
         # Championship
         prob = predict_game(finalist_1[1], finalist_2[1], team_stats, model, feature_names)
@@ -614,8 +614,8 @@ def predict_most_likely_bracket(bracket_data, team_stats, model, feature_names):
     print(f"{'='*50}\n")
     
     # Semifinal 1
-    seed_a, team_a = regional_winners[0]
-    seed_b, team_b = regional_winners[1]
+    seed_a, team_a = regional_winners[1]
+    seed_b, team_b = regional_winners[2]
     prob_a_wins = predict_game(team_a, team_b, team_stats, model, feature_names)
     
     if prob_a_wins > 0.5:
@@ -644,7 +644,7 @@ def predict_most_likely_bracket(bracket_data, team_stats, model, feature_names):
         })
     
     # Semifinal 2
-    seed_c, team_c = regional_winners[2]
+    seed_c, team_c = regional_winners[0]
     seed_d, team_d = regional_winners[3]
     prob_c_wins = predict_game(team_c, team_d, team_stats, model, feature_names)
     
@@ -852,8 +852,8 @@ def predict_bracket_with_game_simulations(bracket_data, team_stats, model, featu
     print(f"{'='*50}\n")
     
     # Semifinal 1
-    seed_a, team_a = regional_winners[0]
-    seed_b, team_b = regional_winners[1]
+    seed_a, team_a = regional_winners[1]
+    seed_b, team_b = regional_winners[2]
     win_percentage, model_prob = simulate_game_monte_carlo(
         team_a, team_b, team_stats, model, feature_names, n_simulations_per_game
     )
@@ -888,7 +888,7 @@ def predict_bracket_with_game_simulations(bracket_data, team_stats, model, featu
         })
     
     # Semifinal 2
-    seed_c, team_c = regional_winners[2]
+    seed_c, team_c = regional_winners[0]
     seed_d, team_d = regional_winners[3]
     win_percentage, model_prob = simulate_game_monte_carlo(
         team_c, team_d, team_stats, model, feature_names, n_simulations_per_game
