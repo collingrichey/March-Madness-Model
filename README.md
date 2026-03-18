@@ -2,6 +2,8 @@
 
 A machine learning model that predicts NCAA March Madness tournament outcomes using logistic regression trained on historical team statistics and tournament results.
 
+This is a work in progress model. 
+
 ## Features
 
 - **Data Scraping**: Automatically scrapes team statistics from Sports Reference
